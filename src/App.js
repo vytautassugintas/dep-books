@@ -1,9 +1,12 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Loader from './BooksPanel/Loader/Loader';
 import FireBase from './Fire';
 
 class App extends Component {
+
+  googleBooksUrl = "https://www.googleapis.com/books/v1";
+  googleBooksQuery = "/volumes?q=game%20of&orderBy=newest";
 
   constructor() {
     super();
@@ -15,20 +18,20 @@ class App extends Component {
 
   componentDidMount() {
     this.setState({isLoading: true});
-    fetch("https://www.googleapis.com/books/v1/volumes?q=isbn:0735619670")
+    fetch(this.googleBooksUrl + this.googleBooksQuery)
       .then(response => response.json())
       .then(data => {
         let books = data.items.map(book => {
           return (
             <div key={book.id}>
-              <p>{book.volumeInfo.title} </p>
+              <h3>{book.volumeInfo.title}</h3>
               <img src={book.volumeInfo.imageLinks.thumbnail} alt={book.volumeInfo.title}/>
               <p>{book.searchInfo.textSnippet}</p>
             </div>
           )
         });
+        console.log(data);
         this.setState({bookData: books, isLoading: false});
-        console.log(data.items[0]);
       })
       .catch(error => this.setState({error, isLoading: false}));
   }
@@ -36,13 +39,8 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo"/>
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <Loader isLoading={this.state.isLoading} />
+        {/*{this.loader(this.state.isLoading)}*/}
         <div className="Books">
           {this.state.bookData}
         </div>
