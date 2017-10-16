@@ -10,6 +10,8 @@
 /build
 .idea/
 
+/src/Fire.js
+
 # misc
 .DS_Store
 .env.local
