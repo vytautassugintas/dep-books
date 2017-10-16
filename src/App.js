@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 import Loader from './BooksPanel/Loader/Loader';
+import Book from './BooksPanel/Book/Book';
 import FireBase from './Fire';
 
 class App extends Component {
@@ -23,11 +24,12 @@ class App extends Component {
       .then(data => {
         let books = data.items.map(book => {
           return (
-            <div key={book.id}>
-              <h3>{book.volumeInfo.title}</h3>
-              <img src={book.volumeInfo.imageLinks.thumbnail} alt={book.volumeInfo.title}/>
-              <p>{book.searchInfo.textSnippet}</p>
-            </div>
+            <Book
+              bookId={book.id}
+              title={book.volumeInfo.title}
+              thumbnail={book.volumeInfo.imageLinks.thumbnail}
+              description={book.searchInfo.textSnippet}
+            />
           )
         });
         console.log(data);
@@ -39,7 +41,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Loader isLoading={this.state.isLoading} />
+        <Loader isLoading={this.state.isLoading}/>
         {/*{this.loader(this.state.isLoading)}*/}
         <div className="Books">
           {this.state.bookData}
